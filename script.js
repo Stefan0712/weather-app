@@ -56,6 +56,7 @@ function showData(geoData){
     c_temp = geoData.current.temp_c;
     km_speed = geoData.current.wind_kph;
     m_speed = geoData.current.wind_mph;
+    changeBg(geoData.current.condition.text)
 
 
 
@@ -84,6 +85,12 @@ function changeUnit(){
     }
 
 }
+function changeBg(status){
+    if(status.includes("cloud")){
+        document.body.style.cssText = "background-image: url('imgs/cloudy.jpg')";
+    }
+}
+
 
 
 
