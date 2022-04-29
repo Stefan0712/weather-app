@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Weather app</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="display">
+            <div class="header">
+                <div class="btnContainer"><div class="btnBg"></div><button id="tempUnitBtn">C</button></div>
+                <div id="country"></div>
+                <div id="locName"></div>
+                <div id="condition"></div>
+            </div>
+            <div class="main">
+                <div id="last-update">Last update</div>
+                <div id="temp"></div>
+                <div id="feels-like">Feels like</div>
+                <div id="wind-dir">Wind direction</div>
+                <div id="wind-speed">Wind speed</div>
+                <div id="precip">Precipitations</div>
+                <div id="humid">Humidity</div>
+                <div id="uv">UV</div>
+            </div>
+        </div>
+        <div class="inputs">
+            <input type="text" name="searchBar" id="search-bar">
+            <button type="button" id="search-button" onclick="setData()">Search</button>
+        </div>
+    </div>
+</body>
+</html>
