@@ -3,6 +3,7 @@ const search = document.getElementById('search-bar')
 const searchBtn = document.getElementById('search-button')
 const tempUnitBtn = document.getElementById('tempUnitBtn')
 const unitBtn = document.getElementById('unit')
+const bodyBg = document.getElementById('bodyBg')
 
 
 const country = document.getElementById('country')
@@ -22,6 +23,12 @@ let f_temp;
 let c_temp;
 let km_speed;
 let m_speed;
+search.addEventListener('keypress',function(event){
+    if(event.key=='Enter'){
+        event.preventDefault();
+        searchBtn.click();
+    }
+})
 
 
 let loc = undefined;
@@ -56,7 +63,10 @@ function showData(geoData){
     c_temp = geoData.current.temp_c;
     km_speed = geoData.current.wind_kph;
     m_speed = geoData.current.wind_mph;
-    changeBg(geoData.current.condition.text)
+    let status = geoData.current.condition.text.toLowerCase();
+    let isDay = geoData.current.is_day;
+    
+    changeBg(status, isDay)
 
 
 
@@ -85,9 +95,24 @@ function changeUnit(){
     }
 
 }
-function changeBg(status){
+function changeBg(status,isDay){
     if(status.includes("cloud")){
-        document.body.style.cssText = "background-image: url('imgs/cloudy.jpg')";
+        bodyBg.style.cssText = "background-image: url('imgs/cloudy.jpg')";
+    }else  if(status.includes("sun")){
+        bodyBg.style.cssText = "background-image: url('imgs/sunny.jpg')";
+    }else  if(status.includes("rain")){
+        bodyBg.style.cssText = "background-image: url('imgs/rainy.jpg')";
+    }else  if(status.includes("snow")){
+        bodyBg.style.cssText = "background-image: url('imgs/snowing.jpg')";
+    }else  if(status.includes("mist")){
+        bodyBg.style.cssText = "background-image: url('imgs/mist.jpg')";
+    }else  if(status.includes("clear")){
+        
+        if(isDay==1){
+        bodyBg.style.cssText = "background-image: url('imgs/day.jpg')";
+        }else if(isDay==0){
+            bodyBg.style.cssText = "background-image: url('imgs/night.jpg')";    
+        }
     }
 }
 
