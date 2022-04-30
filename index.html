@@ -8,32 +8,31 @@
     <title>Weather app</title>
 </head>
 <body>
-    <div id="bodyBg"></div>
-    <div class="main-containerBg"></div>
+    <div class="header">
+        <input type="text" name="searchBar" id="search-bar">
+        <button type="button" id="search-button" onclick="setData()">Search</button>
+    </div>
     <div class="main-container">
-        <div class="display">
-            <div class="header">
-                <div id="country"></div>
-                <div id="locName"></div>
-                <div id="condition"></div>
-            </div>
             <div class="main">
+                <div id="country">Country</div>
+                <div id="locName">Location</div>
+                <div id="condition">Condition</div>
                 <div id="last-update">Last update</div>
-                <div id="temp"></div>
-                <div id="feels-like">Feels like</div>
+                <div id="tempC">Temperature C</div>
+                <div id="tempF">Temperature F</div>
+                <div id="feels-likeC">Feels like C</div>
+                <div id="feels-likeF">Feels like F</div>
                 <div id="wind-dir">Wind direction</div>
                 <div id="wind-speed">Wind speed</div>
                 <div id="precip">Precipitations</div>
                 <div id="humid">Humidity</div>
                 <div id="uv">UV</div>
             </div>
-        </div>
-        <div class="inputs">
-            <button class="units" id="tempUnitBtn" onclick="changeTempUnit()">Celsius</button>
-            <button class="units" id="unit" onclick="changeUnit()">Miles</button>
-            <input type="text" name="searchBar" id="search-bar">
-            <button type="button" id="search-button" onclick="setData()">Search</button>
-        </div>
+            <div class="future">
+                
+            </div>
+           
+        
     </div>
 
 </body>
