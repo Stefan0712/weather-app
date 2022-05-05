@@ -135,7 +135,7 @@ function forecastDays(geoData){
 
     const precip = document.createElement('div')
     precip.classList.add('precip');
-    precip.innerHTML ="Precipitations: " +geoData.forecast.forecastday[i].day.totalprecip_mm+" mm";
+    precip.innerHTML ="Precip: " +geoData.forecast.forecastday[i].day.totalprecip_mm+" mm";
     dayContainer.appendChild(precip);
 
         if(i>=0 && i<arrLength-1){
