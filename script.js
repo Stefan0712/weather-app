@@ -43,7 +43,7 @@ function setData(){
     
 }
 async function getData(loc){
-    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=d8d2397a14de455eaa6135143222904&q=${loc}&days=5&aqi=no&alerts=no
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=d8d2397a14de455eaa6135143222904&q=${loc}&days=7&aqi=no&alerts=no
     `, {mode: 'cors'});
     const geoData = await response.json();
     
