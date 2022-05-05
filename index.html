@@ -7,29 +7,40 @@
     <link rel="stylesheet" href="style.css">
     <title>Weather app</title>
 </head>
-<body>
-    <div class="header">
-        <input type="text" name="searchBar" id="search-bar">
-        <button type="button" id="search-button" onclick="setData()">Search</button>
-    </div>
+<body>  
     <div class="main-container">
             <div class="main">
-                <div id="country">Country</div>
-                <div id="locName">Location</div>
-                <div id="condition">Condition</div>
-                <div id="last-update">Last update</div>
-                <div id="tempC">Temperature C</div>
-                <div id="tempF">Temperature F</div>
-                <div id="feels-likeC">Feels like C</div>
-                <div id="feels-likeF">Feels like F</div>
-                <div id="wind-dir">Wind direction</div>
-                <div id="wind-speed">Wind speed</div>
-                <div id="precip">Precipitations</div>
-                <div id="humid">Humidity</div>
-                <div id="uv">UV</div>
+                <div class="initialMenu">
+                    <div class="textBg"></div>
+                    <h1>Enter a location and press Enter</h1>
+                    <input type="text" name="searchBar" id="search-bar">
+                    
+                </div>
+                <div class="current">
+
+                    <div id="locName">Location</div>
+                    <div id="condition">Condition</div>
+                    <img id="condIcon">
+                    <div id="last-update">Last update</div>
+                    <div id="temp">Temperature C</div>
+                    
+                    <div id="feels-like">Feels like C</div>
+                    
+                    <div id="wind-dir">Wind direction</div>
+                    <img id="arrow" src="./imgs/arrow.svg">
+                    <div id="wind-speed">Wind speed</div>
+                    <div id="precip">Precipitations</div>
+                    <div id="humid">Humidity</div>
+                    <div id="uv">UV</div>
+                </div>
+                <div class="future"></div>
             </div>
-            <div class="future">
-                
+            <div class="menu">
+                <div class="inputs">
+
+                    
+                    <button type="button" id="search-button" onclick="setData()">Search</button>
+                </div>
             </div>
            
         
