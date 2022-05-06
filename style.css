@@ -8,6 +8,14 @@ body{
     padding: 0px;
 
 }
+@keyframes slide {
+    0% {position: absolute; left: 0px;}
+    100% {position: absolute; left: -100%;}
+}
+.slideAnimation{
+    animation-name: slide;
+    animation-duration: 1s;
+}
 .initialMenu{
     background-image: url('./imgs/initialBg.jpg');
     height: 100%;
@@ -19,6 +27,8 @@ body{
     flex-direction: column;
     position: absolute;
     z-index: 1;
+    
+
 }
 .textBg{
     background-color: black;
@@ -32,6 +42,7 @@ body{
 .initialMenu h1{
     z-index: 1;
 }
+
 
 .main-container{
     display: grid;
@@ -231,6 +242,8 @@ body{
 }
 
 
+
+
 #search-button{
     height: 40px;
     width: 100px;
@@ -250,6 +263,7 @@ body{
         padding-top: 200px;
 
     }
+    
     .textBg{
         width: 400px;
     }

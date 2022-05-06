@@ -34,9 +34,14 @@ let firstRun = true;
 function setData(){
     if(firstRun==true){
         firstRun=false;
-        initialMenu.style.cssText = "display: none"
+        document.getElementById('startText').innerText = "Loading..."
+        setTimeout(()=>{
+        initialMenu.style.cssText = "display: none";
         inputs.appendChild(search)
-        inputs.appendChild(searchBtn)
+        inputs.appendChild(searchBtn)},500)
+        initialMenu.classList.add('slideAnimation')
+        
+        
     }
     loc = document.getElementById('search-bar').value;
     getData(loc);
@@ -175,6 +180,9 @@ function changeBg(status,isDay){
             condIcon.setAttribute('src','./imgs/moonIcon.svg')
             mainContainer.style.cssText = "background-image: url('imgs/night.jpg')";    
         }
+    }else {
+        condIcon.setAttribute('src','./imgs/sun.svg')
+        mainContainer.style.cssText = "background-image: url('imgs/day.jpg')";
     }
 }
 
@@ -211,3 +219,6 @@ function winDir(){
 }
 
 
+function loading(){
+    console.log("loading")
+}
