@@ -8,43 +8,92 @@
     <title>Weather app</title>
 </head>
 <body>  
-    <div class="main-container">
-        <div class="initialMenu">
-            <div class="textBg"></div>
-            <h1 id="startText">Enter a location and press Enter</h1>
-            <input type="text" name="searchBar" id="search-bar">
+    
+    <div class="loading-screen">
+        <h1 style="color: rgba(71, 70, 70, 0.692)">Loading...</h1>
+        <img id="loading-icon" src="imgs/loading.png">
+    </div>
+    
+        <nav>
+            <div class="search firstRun">
+                <input type="text" name="searchBar" id="search-bar" placeholder="Enter location">
+                <button id="search-btn"><img src="/imgs/search.png" onclick="search()"></button>
+            </div>
+        </nav>
+        <div class="main hide">
+            <div class="current">
+                <div class="general-info">
+                    <div class="today-card">
+                        <div class="current-date">
+                            <div>
+                                <div>Today</div>
+                                <div id="date-now"></div>
+                            </div>
+                            <img src="" class="icons" id="weather-status-icon"></img>
+                        </div>
+                        <div id="temp"></div>
+                        <div class="location">
+                            <img id="location-icon" src="imgs/location.png">
+                            <div id="location-name"></div>
+                        </div>
+                    </div>
+                        <div class="future"></div>
+                    
+                </div>
+                
+                    <div class="more-info">
+                        <div class="more-info-cards">
+                            <div>SUNRISE</div>
+                            <div id="sunrise"></div>
+                            <img class="icons" src="imgs/sunrise.png" id="sunrise-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>SUNSET</div>
+                            <div id="sunset"></div>
+                            <img class="icons" src="imgs/sunset.png" id="sunset-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>PRECIPITATION</div>
+                            <div id="precipitation"></div>
+                            <img class="icons" src="imgs/precipitation.png" id="precip-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>HUMIDITY</div>
+                            <div id="humidity"></div>
+                            <img class="icons" src="imgs/humidity.png" id="humidity-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>WIND</div>
+                            <div id="wind"></div>
+                            <img class="icons" src="imgs/wind.png" id="wind-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>WIND DIRECTION</div>
+                            <div id="wind-dir"></div>
+                            <img class="icons" src="imgs/arrow.png" id="wind-dir-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>FEELS LIKE</div>
+                            <div id="feels-like"></div>
+                            <img class="icons" src="imgs/feelslike.png" id="feels-like-icon">
+                        </div>
+                        <div class="more-info-cards">
+                            <div>UV</div>
+                            <div id="uv"></div>
+                            <img class="icons" src="imgs/uv.png" id="uv-icon">
+                        </div>
+                        
+                    </div>
+                
+                
+                
+            </div>
             
         </div>
-            <div class="main">
-                <div class="current">
-
-                    <div id="locName">Location</div>
-                    <div id="condition">Condition</div>
-                    <img id="condIcon">
-                    <div id="last-update">Last update</div>
-                    <div id="temp">Temperature C</div>
-                    
-                    <div id="feels-like">Feels like C</div>
-                    
-                    <div id="wind-dir">Wind direction</div>
-                    <img id="arrow" src="./imgs/arrow.svg">
-                    <div id="wind-speed">Wind speed</div>
-                    <div id="precip">Precipitations</div>
-                    <div id="humid">Humidity</div>
-                    <div id="uv">UV</div>
-                </div>
-                <div class="future"></div>
-            </div>
-            <div class="menu">
-                <div class="inputs">
-
-                    
-                    <button type="button" id="search-button" onclick="setData()">Search</button>
-                </div>
-            </div>
+            
            
         
-    </div>
+    
 
 </body>
 </html>

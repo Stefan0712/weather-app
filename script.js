@@ -1,51 +1,47 @@
-const search = document.getElementById('search-bar')
-const searchBtn = document.getElementById('search-button')
+const searchBar = document.getElementById('search-bar')
+const searchBtn = document.getElementById('search-btn')
 const forecastPanel = document.querySelector('.future');
-const mainContainer = document.body
-const inputs = document.querySelector('.inputs')
-const initialMenu = document.querySelector('.initialMenu')
-
-
-const country = document.getElementById('country')
-const locName = document.getElementById('locName')
-const condition = document.getElementById('condition')
-const lastUpdate = document.getElementById('last-update')
+const mainContainer = document.querySelector('.main')
+const backgroundImg = document.getElementById('background-image')
+const background = document.querySelector('.background')
+//today-card
+//current-date
+const dateNow = document.getElementById('date-now')
+//temperature
 const temp = document.getElementById('temp')
+//location
+const locationName = document.getElementById('location-name')
 
-const feelsLike = document.getElementById('feels-like')
 
-const windDir = document.getElementById('wind-dir')
-const windSpeed = document.getElementById('wind-speed')
-const precip = document.getElementById('precip')
-const humid = document.getElementById('humid')
+const dayTime = document.getElementById('day-time')
+//general info - general weather
+const condition = document.getElementById('condition')
+
+
+
+//more info
+const sunrise = document.getElementById('sunrise')
+const sunset = document.getElementById('sunset')
+const precip = document.getElementById('precipitation')
+const humidity = document.getElementById('humidity')
+const wind = document.getElementById('wind')
+const wind_dir = document.getElementById('wind-dir')
+const feels_like = document.getElementById('feels-like')
 const uv = document.getElementById('uv')
 
-let globalGeoData;
-search.addEventListener('keypress',function(event){
-    if(event.key=='Enter'){
-        event.preventDefault();
-        searchBtn.click();
-    }
-})
 
 
-let loc = undefined;
+
+
 let firstRun = true;
-function setData(){
-    if(firstRun==true){
-        firstRun=false;
-        document.getElementById('startText').innerText = "Loading..."
-        setTimeout(()=>{
-        initialMenu.style.cssText = "display: none";
-        inputs.appendChild(search)
-        inputs.appendChild(searchBtn)},500)
-        initialMenu.classList.add('slideAnimation')
-        
-        
+let isLoading = false;
+const search = () =>{
+    getData(searchBar.value)
+    if(!firstRun){
+        isLoading = true;
+        document.querySelector('.loading-screen').classList.add('show-loading')
+        document.getElementById('loading-icon').classList.add('animate-loading')
     }
-    loc = document.getElementById('search-bar').value;
-    getData(loc);
-    
 }
 async function getData(loc){
     const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=d8d2397a14de455eaa6135143222904&q=${loc}&days=7&aqi=no&alerts=no
@@ -54,40 +50,64 @@ async function getData(loc){
     
     console.log(geoData)
     showData(geoData);
+    if(firstRun){
+        document.querySelector('.main').classList.add('show')
+        document.querySelector('.search').classList.remove('firstRun')
+        firstRun = false;
+    }
+    
     
 }
 
 
 function showData(geoData){
-    //country.innerHTML = geoData.location.country;
-    locName.innerHTML = geoData.location.country+", "+geoData.location.region;
-    condition.innerHTML = geoData.current.condition.text;
-    lastUpdate.innerHTML = `Last updated ${geoData.current.last_updated}`
-    temp.innerHTML = `${geoData.current.temp_c} °C`;
-    feelsLike.innerHTML = `Feels like ${geoData.current.feelslike_c} °C`
+    //general info - location
+    locationName.innerHTML = `${geoData.location.region}, ${geoData.location.country}`
     
-    windDir.innerHTML = `Wind direction: ${geoData.current.wind_dir}`
-    windSpeed.innerHTML = `Wind speed: ${geoData.current.wind_kph} k/h`
+    //general info - general weather
+    temp.innerHTML = `${geoData.current.temp_c} °C`
+    feels_like.innerHTML = geoData.current.feelslike_c + ' °C'
+    let date = new Date()
+    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+    const d = new Date();
+    let dayOfWeek = weekday[d.getDay()];
+    let month = monthNames[date.getMonth()]
+    dateNow.innerHTML = `${dayOfWeek}, ${date.getDay()} ${month}`
+    
+
+    //more info
+    sunrise.innerHTML = geoData.forecast.forecastday[0].astro.sunrise
+    sunset.innerHTML = geoData.forecast.forecastday[0].astro.sunset
+    humidity.innerHTML = geoData.forecast.forecastday[0].day.totalprecip_mm
+    humidity.innerHTML = geoData.current.humidity
+    wind.innerHTML = geoData.current.wind_kph
+    wind_dir.innerHTML = geoData.current.wind_dir
+    feels_like.innerHTML = geoData.current.feelslike_c + ' °C'
+    uv.innerHTML = geoData.current.uv
+
+    //other
     precip.innerHTML = `Precipitations: ${geoData.current.precip_mm} mm`
-    humid.innerHTML = `Humidity: ${geoData.current.humidity}`
+    humidity.innerHTML = `Humidity: ${geoData.current.humidity}`
     uv.innerHTML = `UV ${geoData.current.uv}`
-    let status = geoData.current.condition.text.toLowerCase();
-    let isDay = geoData.current.is_day;
-    globalGeoData = geoData
     
-    changeBg(status, isDay)
     forecastDays(geoData);
-    winDir();
-
-
-
+    if(isLoading){
+        document.querySelector('.loading-screen').classList.remove('show-loading')
+        document.getElementById('loading-icon').classList.remove('animate-loading')
+    }
+    updateStatusIcon(geoData.current.condition.text)
+    changeWindArrow(geoData.current.wind_dir)
 }
+
 function forecastDays(geoData){
     if(document.querySelector('.days')!=null){
         document.querySelector(".future").remove();
         const newFuture = document.createElement('div')
         newFuture.classList.add("future")
-        document.querySelector('.main').appendChild(newFuture)
+        document.querySelector('.general-info').appendChild(newFuture)
     }
 
     let arrLength = geoData.forecast.forecastday.length;
@@ -104,121 +124,78 @@ function forecastDays(geoData){
     
     const currentC = document.createElement('div')
     currentC.classList.add('currentC');
-    currentC.innerHTML = "Current " +geoData.forecast.forecastday[i].day.avgtemp_c + " °C";
+    currentC.innerHTML = `${geoData.forecast.forecastday[i].day.avgtemp_c} °C`;
     dayContainer.appendChild(currentC);
 
-    const currentF = document.createElement('div')
-    currentF.classList.add('currentF');
-    currentF.innerHTML = "Current " +geoData.forecast.forecastday[i].day.avgtemp_f + " F";
-    dayContainer.appendChild(currentF);
-
     const minC = document.createElement('div')
-    minC.classList.add('minC');
-    minC.innerHTML ="Min " +geoData.forecast.forecastday[i].day.mintemp_c + " °C";
+    minC.classList.add('tempC');
+    minC.innerHTML =`${geoData.forecast.forecastday[i].day.mintemp_c}/${geoData.forecast.forecastday[i].day.maxtemp_c} °C`;
     dayContainer.appendChild(minC);
-
-    const minF = document.createElement('div')
-    minF.classList.add('minF');
-    minF.innerHTML = "Min "+geoData.forecast.forecastday[i].day.mintemp_f+" F";
-    dayContainer.appendChild(minF);
-
-    const maxC = document.createElement('div')
-    maxC.classList.add('maxC');
-    maxC.innerHTML = "Max "+ geoData.forecast.forecastday[i].day.maxtemp_c+ " °C";
-    dayContainer.appendChild(maxC);
-
-    const maxF = document.createElement('div')
-    maxF.classList.add('maxF');
-    maxF.innerHTML ="Max "+ geoData.forecast.forecastday[i].day.maxtemp_f+" F";
-    dayContainer.appendChild(maxF);
 
     const cond = document.createElement('div')
     cond.classList.add('cond');
     cond.innerHTML = geoData.forecast.forecastday[i].day.condition.text;
     dayContainer.appendChild(cond);
-
-
-    const precip = document.createElement('div')
-    precip.classList.add('precip');
-    precip.innerHTML ="Precip: " +geoData.forecast.forecastday[i].day.totalprecip_mm+" mm";
-    dayContainer.appendChild(precip);
-
-        if(i>=0 && i<arrLength-1){
-            const bar = document.createElement('div')
-            bar.classList.add('bar')
-            document.querySelector('.future').appendChild(bar)
-            
-        }
-
-    }
 }
 
 
-function changeBg(status,isDay){
-    const condIcon = document.getElementById('condIcon');
-    if(status.includes("cloud")){
-        condIcon.setAttribute('src','./imgs/cloudIcon.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/cloudy.jpg')";
-    }else  if(status.includes("sun")){
-        condIcon.setAttribute('src','./imgs/sunIcon.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/sunny.jpg')";
-    }else  if(status.includes("rain")){
-        condIcon.setAttribute('src','./imgs/rainycloudIcon.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/rainy.jpg')";
-    }else  if(status.includes("snow")){
-        condIcon.setAttribute('src','./imgs/snowIcon.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/snowing.jpg')";
-    }else  if(status.includes("mist")){
-        condIcon.setAttribute('src','./imgs/mistIcon.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/mist.jpg')";
-    }else  if(status.includes("clear")){
-        
-        if(isDay==1){
-            condIcon.setAttribute('src','./imgs/sun.svg')
-            mainContainer.style.cssText = "background-image: url('imgs/day.jpg')";
-        }else if(isDay==0){
-            condIcon.setAttribute('src','./imgs/moonIcon.svg')
-            mainContainer.style.cssText = "background-image: url('imgs/night.jpg')";    
-        }
-    }else {
-        condIcon.setAttribute('src','./imgs/sun.svg')
-        mainContainer.style.cssText = "background-image: url('imgs/day.jpg')";
+
+
+}
+const updateStatusIcon = (status) =>{
+
+    const weatherIcon = document.getElementById('weather-status-icon')
+    switch(status){
+        case 'Sunny':
+            weatherIcon.setAttribute('src','imgs/sunny.png')
+            mainContainer.setAttribute('background-image','url("imgs/sunny-bg.jpg")')
+            break
+        case 'Partly cloudy':
+            weatherIcon.setAttribute('src','imgs/cloud.png')
+            document.body.setAttribute('src','imgs/cloudy-bg.jpg')
+            break
+        case 'Rainy':
+            weatherIcon.setAttribute('src','imgs/rainy.png')
+            document.body.setAttribute('src','imgs/rainy-bg.jpg')
+            break
+        default:
+            weatherIcon.setAttribute('src','imgs/sunny.png')
+            document.body.setAttribute('src','imgs/sunny-bg.jpg')
+            break
+    
     }
 }
-
-function winDir(){
-    const arrow = document.getElementById('arrow')
-    let windDirection = globalGeoData.current.wind_dir;
-    switch(windDirection){
-        case 'N':
-            arrow.style.cssText = 'transform: rotate(0deg);';
+const changeWindArrow = (direction) =>{
+    let degrees = 0;
+    switch(direction){
+        case "N":
+            degrees = 0;
             break;
-        case 'NW':
-            arrow.style.cssText = 'transform: rotate(45deg);';
+        case "N-E":
+            degrees = 45;
             break;
-        case 'W':
-            arrow.style.cssText = 'transform: rotate(90deg);';
-            break; 
-        case 'SW':
-            arrow.style.cssText = 'transform: rotate(135deg);';
+        case "E":
+            degrees = 90;
             break;
-        case 'S':
-            arrow.style.cssText = 'transform: rotate(180deg);';
+        case "S-E":
+            degrees = 135;
             break;
-        case 'SE':
-            arrow.style.cssText = 'transform: rotate(-135deg);';
-            break; 
-        case 'E':
-            arrow.style.cssText = 'transform: rotate(-90deg);';
+        case "S":
+            degrees = 180;
             break;
-        case 'NE':
-            arrow.style.cssText = 'transform: rotate(-45deg);';
-            break;  
-        
+        case "S-W":
+            degrees = 225;
+            break;
+        case "W":
+            degrees = 270;
+            break;
+        case "N-W":
+            degrees = 315;
+            break
+        default:
+            degrees = 0;
+            break;
     }
-}
-
-
-function loading(){
-    console.log("loading")
+    
+    document.getElementById('wind-dir-icon').style.cssText = `transform: rotate(${degrees}deg)`
 }
